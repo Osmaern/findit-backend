@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Verify your phone | FindIt</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="shell">
+    <section class="hero" aria-hidden="true">
+      <div>
+        <div class="brand">Find<span class="it">It</span></div>
+        <div class="tagline">Lost. Found. Reunited.</div>
+      </div>
+      <div>
+        <h1>One last step</h1>
+        <p>We sent a 6-digit code by SMS to confirm your phone number.</p>
+      </div>
+      <div class="badge"><strong>USTED</strong><span>Together for a Connected Campus</span></div>
+    </section>
+
+    <section class="panel">
+      <h2>Verify Your Phone</h2>
+      <p class="subtitle">Enter the 6-digit code sent to your phone. It expires in 10 minutes.</p>
+
+      <div id="message" class="notice error" role="alert" hidden></div>
+
+      <form id="verify-form" novalidate>
+        <div class="field">
+          <label for="phone">Phone number</label>
+          <input id="phone" name="phone" type="tel" inputmode="tel" required>
+        </div>
+        <div class="field">
+          <label for="code">Verification code</label>
+          <input id="code" name="code" inputmode="numeric" autocomplete="one-time-code" pattern="\d{6}" maxlength="6" required>
+        </div>
+        <button class="primary" type="submit">Verify</button>
+      </form>
+      <button id="resend" class="secondary" type="button">Send a new code</button>
+
+      <p class="footer-text"><a href="login.html">Back to login</a></p>
+    </section>
+  </main>
+  <script src="js/common.js"></script>
+  <script src="js/verify.js"></script>
+</body>
+</html>

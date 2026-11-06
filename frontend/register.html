@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create your FindIt account</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="shell">
+    <section class="hero" aria-hidden="true">
+      <div>
+        <div class="brand">Find<span class="it">It</span></div>
+        <div class="tagline">Lost. Found. Reunited.</div>
+      </div>
+      <div>
+        <h1>Never Lose Your Belongings Again!</h1>
+        <p>Report lost items, find what you've lost, and get reunited.</p>
+      </div>
+      <div class="badge"><strong>USTED</strong><span>Together for a Connected Campus</span></div>
+    </section>
+
+    <section class="panel">
+      <div class="brand-small">Find<span>It</span></div>
+      <div class="tagline-small">Lost. Found. Reunited.</div>
+      <h2>Create Your Account</h2>
+      <p class="subtitle">Join FindIt and be part of a safer, more connected campus community.</p>
+
+      <div id="message" class="notice error" role="alert" hidden></div>
+
+      <form id="register-form" novalidate>
+        <div class="field">
+          <label for="full_name">Full name</label>
+          <input id="full_name" name="full_name" autocomplete="name" required minlength="2" maxlength="120">
+        </div>
+        <div class="field">
+          <label for="email">Personal email <span class="optional">(optional)</span></label>
+          <input id="email" name="email" type="email" autocomplete="email" maxlength="255">
+        </div>
+        <div class="field">
+          <label for="phone">Phone number</label>
+          <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="0244123456" required>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="input-wrap">
+            <input id="password" name="password" type="password" autocomplete="new-password" required minlength="8" maxlength="128">
+            <button type="button" class="toggle" data-toggle="password">Show</button>
+          </div>
+        </div>
+        <div class="field">
+          <label for="confirm">Confirm password</label>
+          <div class="input-wrap">
+            <input id="confirm" name="confirm" type="password" autocomplete="new-password" required minlength="8" maxlength="128">
+            <button type="button" class="toggle" data-toggle="confirm">Show</button>
+          </div>
+        </div>
+        <button class="primary" type="submit">Register</button>
+      </form>
+
+      <div class="or-line">or</div>
+      <button class="google-btn" type="button" disabled aria-describedby="google-soon">
+        <span class="g-mark">G</span> Continue with Google
+      </button>
+      <p id="google-soon" class="coming-soon">Google sign-in is coming soon.</p>
+
+      <p class="footer-text">Already have an account? <a href="login.html">Login here</a></p>
+    </section>
+  </main>
+  <script src="js/common.js"></script>
+  <script src="js/register.js"></script>
+</body>
+</html>
