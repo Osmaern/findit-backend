@@ -6,12 +6,13 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
-from app.routers import auth
+from app.routers import auth, items
 
 FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend"
 
 app = FastAPI(title="FindIt API", version="0.3.0")
 app.include_router(auth.router)
+app.include_router(items.router)
 
 
 @app.get("/api/v1/health")
