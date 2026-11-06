@@ -2,10 +2,11 @@ import hmac
 from datetime import timedelta
 
 import httpx
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.core.config import settings
 from app.core.database import get_db
 from app.core.security import (
     create_access_token,
@@ -50,9 +51,12 @@ def _send_new_code(db: Session, user: User) -> None:
 def register(body: RegisterIn, db: Session = Depends(get_db)):
     if _find_user(db, body.phone):
         raise HTTPException(status_code=409, detail="This phone number is already registered")
+    if body.email and db.scalar(select(User).where(User.email == body.email)):
+        raise HTTPException(status_code=409, detail="This email is already registered")
     user = User(
         full_name=body.full_name,
         phone=body.phone,
+        email=body.email,
         password_hash=hash_password(body.password),
         phone_verified=False,
         is_active=False,
@@ -110,7 +114,7 @@ def resend_code(body: PhoneIn, db: Session = Depends(get_db)):
 
 
 @router.post("/login", response_model=TokenOut)
-def login(body: LoginIn, db: Session = Depends(get_db)):
+def login(body: LoginIn, response: Response, db: Session = Depends(get_db)):
     wrong = HTTPException(status_code=401, detail="Invalid phone or password")
     user = _find_user(db, body.phone)
     if user is None:
@@ -131,4 +135,13 @@ def login(body: LoginIn, db: Session = Depends(get_db)):
     user.failed_logins = 0
     user.locked_until = None
     db.commit()
-    return TokenOut(access_token=create_access_token(user.id))
+    token = create_access_token(user.id)
+    response.set_cookie(
+        key="access_token",
+        value=token,
+        max_age=settings.access_token_minutes * 60,
+        httponly=True,
+        secure=settings.app_env == "production",
+        samesite="lax",
+    )
+    return TokenOut(access_token=token)

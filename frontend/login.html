@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login to FindIt</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="shell">
+    <section class="hero" aria-hidden="true">
+      <div>
+        <div class="brand">Find<span class="it">It</span></div>
+        <div class="tagline">Lost. Found. Reunited.</div>
+      </div>
+      <div>
+        <h1>Welcome Back!</h1>
+        <p>Sign in to access your FindIt account.</p>
+      </div>
+      <div class="badge"><strong>USTED</strong><span>Together for a Connected Campus</span></div>
+    </section>
+
+    <section class="panel">
+      <div class="brand-small">Find<span>It</span></div>
+      <div class="tagline-small">Lost. Found. Reunited.</div>
+      <h2>Login to Your Account</h2>
+
+      <div id="message" class="notice error" role="alert" hidden></div>
+
+      <form id="login-form" novalidate>
+        <div class="field">
+          <label for="phone">Phone number</label>
+          <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="0244123456" required>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="input-wrap">
+            <input id="password" name="password" type="password" autocomplete="current-password" required>
+            <button type="button" class="toggle" data-toggle="password">Show</button>
+          </div>
+        </div>
+        <div class="row">
+          <label><input id="remember" type="checkbox" style="width:auto;padding:0"> Remember me</label>
+          <span class="muted-link" title="Password reset is coming soon">Forgot password?</span>
+        </div>
+        <button class="primary" type="submit">Login</button>
+      </form>
+
+      <div class="or-line">or</div>
+      <button class="google-btn" type="button" disabled aria-describedby="google-soon">
+        <span class="g-mark">G</span> Continue with Google
+      </button>
+      <p id="google-soon" class="coming-soon">Google sign-in is coming soon.</p>
+
+      <p class="footer-text">Don't have an account? <a href="register.html">Register here</a></p>
+    </section>
+  </main>
+  <script src="js/common.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>

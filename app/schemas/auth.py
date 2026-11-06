@@ -24,9 +24,23 @@ class _PhoneModel(BaseModel):
         return normalize_phone(value)
 
 
+EMAIL_PATTERN = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+
+
 class RegisterIn(_PhoneModel):
     full_name: str = Field(min_length=2, max_length=120)
+    email: str | None = None
     password: str = Field(min_length=8, max_length=128)
+
+    @field_validator("email")
+    @classmethod
+    def _normalize_email(cls, value: str | None) -> str | None:
+        if value is None or not value.strip():
+            return None
+        value = value.strip().lower()
+        if len(value) > 255 or not EMAIL_PATTERN.match(value):
+            raise ValueError("Enter a valid email address")
+        return value
 
 
 class VerifyIn(_PhoneModel):
