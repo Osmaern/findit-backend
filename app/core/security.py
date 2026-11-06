@@ -45,3 +45,11 @@ def hash_otp(code: str) -> str:
 def create_access_token(user_id: int) -> str:
     expires = utc_now() + timedelta(minutes=settings.access_token_minutes)
     return jwt.encode({"sub": str(user_id), "exp": expires}, settings.secret_key, algorithm="HS256")
+
+
+def decode_access_token(token: str) -> int | None:
+    try:
+        payload = jwt.decode(token, settings.secret_key, algorithms=["HS256"])
+        return int(payload["sub"])
+    except (jwt.InvalidTokenError, KeyError, ValueError):
+        return None
