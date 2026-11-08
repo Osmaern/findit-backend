@@ -7,7 +7,7 @@ PASSWORD = "StrongPass123"
 def register(client, phone=PHONE, password=PASSWORD):
     return client.post(
         "/api/v1/auth/register",
-        json={"full_name": "Ama Mensah", "phone": phone, "password": password},
+        json={"full_name": "Ama Mensah", "phone": phone, "password": password, "accept_terms": True},
     )
 
 

@@ -7,6 +7,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 import app.models  # noqa: F401  (registers all tables)
+from app.core import ratelimit
+from app.core.config import settings
 from app.core.database import Base, get_db
 from app.main import app as fastapi_app
 
@@ -27,6 +29,13 @@ fastapi_app.dependency_overrides[get_db] = _override_get_db
 
 
 @pytest.fixture(autouse=True)
+def no_rate_limits(monkeypatch):
+    """Tests make many requests from one address, so the limiter is off unless a test turns it on."""
+    monkeypatch.setattr(settings, "rate_limit_enabled", False)
+    ratelimit.reset()
+
+
+@pytest.fixture(autouse=True)
 def fresh_database():
     Base.metadata.drop_all(test_engine)
     Base.metadata.create_all(test_engine)
@@ -42,7 +51,9 @@ def client():
 def sms_outbox(monkeypatch):
     """Records SMS messages that the app would send; the real Arkesel call is replaced in tests only."""
     outbox = []
-    monkeypatch.setattr("app.routers.auth.send_sms", lambda phone, message: outbox.append((phone, message)))
+    record = lambda phone, message: outbox.append((phone, message))  # noqa: E731
+    monkeypatch.setattr("app.routers.auth.send_sms", record)
+    monkeypatch.setattr("app.services.notify.send_sms", record)
     return outbox
 
 
