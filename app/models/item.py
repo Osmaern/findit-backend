@@ -25,6 +25,7 @@ class Item(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utc_now)
     expires_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: utc_now() + ITEM_LIFETIME)
 
+    owner: Mapped["User"] = relationship("User")
     private: Mapped["ItemPrivate | None"] = relationship(
         back_populates="item", cascade="all, delete-orphan", uselist=False
     )

@@ -14,6 +14,7 @@ class OTPCode(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    purpose: Mapped[str] = mapped_column(String(20), default="verify", server_default="verify")  # verify | reset
     code_hash: Mapped[str] = mapped_column(String(64))
     attempts: Mapped[int] = mapped_column(default=0, server_default="0")
     used: Mapped[bool] = mapped_column(Boolean, default=False, server_default="0")

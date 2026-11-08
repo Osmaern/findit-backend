@@ -14,11 +14,14 @@ def _user_from_request(authorization: str | None, access_token: str | None, db: 
         token = access_token
     if not token:
         return None
-    user_id = decode_access_token(token)
-    if user_id is None:
+    decoded = decode_access_token(token)
+    if decoded is None:
         return None
+    user_id, version = decoded
     user = db.get(User, user_id)
     if user is None or not user.is_active or not user.phone_verified:
+        return None
+    if version != user.token_version:  # a password change or reset invalidates older sessions
         return None
     return user
 

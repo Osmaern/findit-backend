@@ -21,4 +21,6 @@ class User(Base):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     failed_logins: Mapped[int] = mapped_column(default=0, server_default="0")
     locked_until: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    token_version: Mapped[int] = mapped_column(default=0, server_default="0")  # bumped to sign out all sessions
+    terms_accepted_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)  # when they agreed at sign-up
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
