@@ -1,12 +1,22 @@
 from datetime import date
+from io import BytesIO
 
 import pytest
+from PIL import Image
 
 from tests.conftest import code_from
 
 PASSWORD = "StrongPass123"
 TODAY = date.today().isoformat()
-PNG = b"\x89PNG\r\n\x1a\n" + b"0" * 64
+
+
+def _tiny_png() -> bytes:
+    buffer = BytesIO()
+    Image.new("RGB", (8, 8), "white").save(buffer, "PNG")
+    return buffer.getvalue()
+
+
+PNG = _tiny_png()
 BAD_FILE = b"GIF89a" + b"0" * 64
 
 LOST = {
@@ -29,7 +39,7 @@ FOUND = {
 
 
 def make_user(client, outbox, phone):
-    client.post("/api/v1/auth/register", json={"full_name": "Test User", "phone": phone, "password": PASSWORD})
+    client.post("/api/v1/auth/register", json={"full_name": "Test User", "phone": phone, "password": PASSWORD, "accept_terms": True})
     client.post("/api/v1/auth/verify-phone", json={"phone": phone, "code": code_from(outbox)})
     response = client.post("/api/v1/auth/login", json={"phone": phone, "password": PASSWORD})
     return {"Authorization": f"Bearer {response.json()['access_token']}"}
