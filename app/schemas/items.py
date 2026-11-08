@@ -37,4 +37,11 @@ class ItemOut(BaseModel):
     allow_contact: bool
     created_at: datetime
     photo_ids: list[int]
+    is_owner: bool = False  # true when the person asking owns this item
     private_detail: str | None = None  # set only for the item's owner
+
+
+class MyItemOut(ItemOut):
+    """An item as listed on its owner's My Posts page."""
+
+    pending_claims: int = 0

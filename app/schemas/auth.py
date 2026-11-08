@@ -31,6 +31,14 @@ class RegisterIn(_PhoneModel):
     full_name: str = Field(min_length=2, max_length=120)
     email: str | None = None
     password: str = Field(min_length=8, max_length=128)
+    accept_terms: bool = Field(default=False, strict=True, validate_default=True)
+
+    @field_validator("accept_terms")
+    @classmethod
+    def _must_accept(cls, value: bool) -> bool:
+        if value is not True:
+            raise ValueError("You must accept the Terms and Privacy Policy to register")
+        return value
 
     @field_validator("email")
     @classmethod
@@ -49,6 +57,11 @@ class VerifyIn(_PhoneModel):
 
 class PhoneIn(_PhoneModel):
     pass
+
+
+class ResetIn(_PhoneModel):
+    code: str = Field(pattern=r"^\d{6}$")
+    new_password: str = Field(min_length=8, max_length=128)
 
 
 class LoginIn(_PhoneModel):

@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     arkesel_sender_id: str = "FindIt"
     upload_dir: str = "uploads"
     max_photo_bytes: int = 3_000_000
+    rate_limit_enabled: bool = True
+    trust_proxy_headers: bool = False  # set TRUST_PROXY_HEADERS=true only behind your own reverse proxy
 
 
 settings = Settings()

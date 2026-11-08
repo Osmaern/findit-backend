@@ -2,7 +2,7 @@ import secrets
 from pathlib import Path
 from typing import Literal
 
-from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
+from fastapi import APIRouter, BackgroundTasks, Depends, File, HTTPException, Query, UploadFile
 from fastapi.responses import FileResponse
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session, selectinload
@@ -10,10 +10,14 @@ from sqlalchemy.orm import Session, selectinload
 from app.core.config import settings
 from app.core.database import get_db
 from app.core.deps import get_current_user, get_optional_user
+from app.core.ratelimit import rate_limit
 from app.core.security import utc_now
+from app.models.claim import Claim
 from app.models.item import Item, ItemPhoto, ItemPrivate
 from app.models.user import User
-from app.schemas.items import ItemIn, ItemOut
+from app.schemas.items import ItemIn, ItemOut, MyItemOut
+from app.services.images import InvalidImage, clean_image
+from app.services.notify import notify, short_title
 
 router = APIRouter(prefix="/api/v1/items", tags=["items"])
 
@@ -54,11 +58,12 @@ def _to_out(item: Item, viewer: User | None) -> ItemOut:
         allow_contact=item.allow_contact,
         created_at=item.created_at,
         photo_ids=[photo.id for photo in item.photos],
+        is_owner=is_owner,
         private_detail=item.private.detail if (is_owner and item.private) else None,
     )
 
 
-@router.post("", status_code=201, response_model=ItemOut)
+@router.post("", status_code=201, response_model=ItemOut, dependencies=[Depends(rate_limit("item-create", 30, 3600))])
 def create_item(body: ItemIn, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     item = Item(
         user_id=user.id,
@@ -107,6 +112,34 @@ def list_items(
     return [_to_out(item, None) for item in db.scalars(stmt)]
 
 
+@router.get("/mine", response_model=list[MyItemOut])
+def my_items(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    """The signed-in person's own reports, newest first. Must stay above /{item_id}."""
+    items = db.scalars(
+        select(Item)
+        .where(Item.user_id == user.id)
+        .order_by(Item.created_at.desc())
+        .limit(100)
+        .options(selectinload(Item.photos), selectinload(Item.private))
+    ).all()
+    waiting: dict[int, int] = {}
+    if items:
+        rows = db.execute(
+            select(Claim.item_id, func.count(Claim.id))
+            .where(Claim.item_id.in_([item.id for item in items]), Claim.status == "pending")
+            .group_by(Claim.item_id)
+        )
+        waiting = dict(rows.all())
+    now = utc_now()
+    result = []
+    for item in items:
+        data = _to_out(item, user).model_dump()
+        if item.status == "open" and item.expires_at <= now:
+            data["status"] = "expired"
+        result.append(MyItemOut(**data, pending_claims=waiting.get(item.id, 0)))
+    return result
+
+
 @router.get("/{item_id}", response_model=ItemOut)
 def get_item(item_id: int, db: Session = Depends(get_db), viewer: User | None = Depends(get_optional_user)):
     item = db.get(Item, item_id)
@@ -115,7 +148,7 @@ def get_item(item_id: int, db: Session = Depends(get_db), viewer: User | None = 
     return _to_out(item, viewer)
 
 
-@router.post("/{item_id}/photos", status_code=201)
+@router.post("/{item_id}/photos", status_code=201, dependencies=[Depends(rate_limit("photo-upload", 60, 3600))])
 def upload_photo(
     item_id: int,
     file: UploadFile = File(...),
@@ -136,6 +169,10 @@ def upload_photo(
     content_type = _detect_image_type(data[:12])
     if content_type is None:
         raise HTTPException(status_code=415, detail="Only JPEG, PNG or WEBP images are allowed")
+    try:
+        data = clean_image(data, content_type)  # removes GPS position, camera and time details
+    except InvalidImage:
+        raise HTTPException(status_code=415, detail="That file is not a valid image")
 
     UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
     file_name = secrets.token_hex(16) + EXTENSIONS[content_type]
@@ -162,3 +199,37 @@ def get_photo(
     if not path.exists():
         raise HTTPException(status_code=404, detail="Photo not found")
     return FileResponse(path, media_type=photo.content_type)
+
+
+@router.post("/{item_id}/close", response_model=ItemOut)
+def close_item(
+    item_id: int,
+    background: BackgroundTasks,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    """The owner withdraws a report (found it themselves, no longer needed). Waiting claims are closed."""
+    item = db.get(Item, item_id)
+    if item is None or item.user_id != user.id:
+        raise HTTPException(status_code=404, detail="Item not found")
+    db.scalar(select(Item.id).where(Item.id == item.id).with_for_update())
+    db.refresh(item)
+    if item.status != "open":
+        raise HTTPException(status_code=409, detail="Only an open report can be closed")
+
+    item.status = "closed"
+    now = utc_now()
+    waiting = db.scalars(select(Claim).where(Claim.item_id == item.id, Claim.status == "pending")).all()
+    for claim in waiting:
+        claim.status = "declined"
+        claim.decided_at = now
+    db.commit()
+    db.refresh(item)
+
+    for claim in waiting:
+        background.add_task(
+            notify,
+            claim.claimant.phone,
+            f'FindIt: the report "{short_title(item.title)}" was closed by its owner.',
+        )
+    return _to_out(item, user)

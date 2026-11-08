@@ -42,14 +42,17 @@ def hash_otp(code: str) -> str:
     return hmac.new(settings.secret_key.encode(), code.encode(), hashlib.sha256).hexdigest()
 
 
-def create_access_token(user_id: int) -> str:
+def create_access_token(user_id: int, token_version: int) -> str:
+    """The token carries the account's token version. Changing the version signs out every token issued before."""
     expires = utc_now() + timedelta(minutes=settings.access_token_minutes)
-    return jwt.encode({"sub": str(user_id), "exp": expires}, settings.secret_key, algorithm="HS256")
+    claims = {"sub": str(user_id), "ver": token_version, "exp": expires}
+    return jwt.encode(claims, settings.secret_key, algorithm="HS256")
 
 
-def decode_access_token(token: str) -> int | None:
+def decode_access_token(token: str) -> tuple[int, int] | None:
+    """Returns (user id, token version), or None if the token is invalid or expired."""
     try:
         payload = jwt.decode(token, settings.secret_key, algorithms=["HS256"])
-        return int(payload["sub"])
-    except (jwt.InvalidTokenError, KeyError, ValueError):
+        return int(payload["sub"]), int(payload["ver"])
+    except (jwt.InvalidTokenError, KeyError, ValueError, TypeError):
         return None
