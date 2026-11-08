@@ -1,0 +1,7 @@
+/* Profile page */
+.narrow { max-width: 620px; }
+.profile-card { background: #fff; border-radius: 18px; padding: 22px; margin-bottom: 22px; box-shadow: 0 6px 18px rgba(10, 42, 107, 0.08); }
+.profile-card h2 { text-align: left; color: var(--navy); font-size: 20px; margin: 0 0 14px; }
+.profile-card .help { display: block; color: var(--muted); font-size: 13px; margin-top: 6px; }
+.profile-card form button.primary { width: auto; padding: 12px 26px; }
+input[readonly] { background: #f3f5fa; color: var(--muted); }

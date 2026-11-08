@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin overview | FindIt</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="stylesheet" href="css/users.css">
+</head>
+<body class="app">
+  <header class="topbar">
+    <a class="brand-link" href="dashboard.html">Find<span>It</span></a>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="admin.html">Moderation</a>
+      <a id="nav-logout" href="#" hidden>Logout</a>
+    </nav>
+  </header>
+  <main class="container">
+    <h1 class="page-title">Admin overview</h1>
+    <p class="page-sub">Totals for the whole site, and everyone who has an account.</p>
+    <div id="message" class="notice error" role="alert" hidden></div>
+
+    <section id="stats" class="stat-groups" aria-label="Totals"></section>
+
+    <h2 class="section-title">People</h2>
+    <form id="search-form" class="user-search">
+      <input id="search" type="search" placeholder="Search by name, phone or email" maxlength="80" aria-label="Search people">
+      <button type="submit" class="primary">Search</button>
+    </form>
+    <label class="check-row"><input id="suspended-only" type="checkbox"> Show suspended people only</label>
+    <div id="users"></div>
+    <button id="more" type="button" class="secondary" hidden>Show more</button>
+  </main>
+  <script src="js/common.js"></script>
+  <script src="js/users.js"></script>
+</body>
+</html>

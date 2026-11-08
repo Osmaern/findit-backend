@@ -1,0 +1,127 @@
+/* Styles for the logged-in pages: browse, report and item */
+body.app { display: block; padding: 0; align-items: stretch; background: var(--page); }
+
+.topbar {
+  background: var(--navy);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 22px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.topbar .brand-link { color: #fff; font-size: 24px; font-weight: 800; text-decoration: none; }
+.topbar .brand-link span { color: var(--gold); }
+.topbar nav a { color: #fff; margin-left: 18px; font-weight: 600; text-decoration: none; }
+.topbar nav a:hover { text-decoration: underline; }
+
+.container { max-width: 1040px; margin: 24px auto; padding: 0 16px 40px; }
+.page-title { color: var(--navy); font-size: 26px; margin: 0 0 6px; }
+.page-sub { color: var(--muted); margin: 0 0 20px; }
+
+.filters { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+.filters input, .filters select, .card-form input, .card-form select, .card-form textarea {
+  padding: 12px; border: 1px solid var(--line); border-radius: 10px; font-size: 15px;
+  background: #fff; color: var(--ink); box-sizing: border-box; width: 100%;
+}
+.filters input { flex: 2; min-width: 180px; width: auto; }
+.filters select { flex: 1; min-width: 150px; width: auto; }
+.card-form textarea { min-height: 110px; resize: vertical; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; }
+.item-card {
+  background: #fff; border-radius: 16px; overflow: hidden;
+  box-shadow: 0 6px 18px rgba(10, 42, 107, 0.08);
+  color: var(--ink); text-decoration: none; display: block;
+}
+.item-card:hover { box-shadow: 0 10px 24px rgba(10, 42, 107, 0.16); }
+.thumb { height: 170px; background: #dfe6f3; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 14px; }
+.thumb img { width: 100%; height: 100%; object-fit: cover; }
+.item-body { padding: 14px 16px 16px; }
+.item-body h3 { margin: 8px 0 6px; font-size: 17px; color: var(--ink); }
+.meta { font-size: 13px; color: var(--muted); margin: 3px 0; }
+
+.tag { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; color: #fff; }
+.tag.lost { background: #dc2626; }
+.tag.found { background: #16a34a; }
+
+.empty { grid-column: 1 / -1; text-align: center; color: var(--muted); padding: 40px 10px; }
+
+.card-form {
+  background: #fff; border-radius: 18px; padding: 28px;
+  box-shadow: 0 10px 30px rgba(10, 42, 107, 0.1); max-width: 680px; margin: 0 auto;
+}
+.card-form .field { margin-bottom: 16px; }
+.card-form label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+.help { font-size: 13px; color: var(--muted); margin: 6px 0 0; }
+
+.type-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+.type-toggle label {
+  border: 2px solid var(--line); border-radius: 12px; padding: 14px; text-align: center;
+  font-weight: 700; cursor: pointer; margin: 0;
+}
+.type-toggle label:has(input:checked) { border-color: var(--blue); background: #eef4ff; }
+.type-toggle input { margin-right: 6px; }
+
+.thumbs { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+.thumbs img { width: 96px; height: 96px; object-fit: cover; border-radius: 10px; }
+
+.detail { background: #fff; border-radius: 18px; padding: 28px; box-shadow: 0 10px 30px rgba(10, 42, 107, 0.1); }
+.detail h1 { margin: 10px 0 8px; font-size: 26px; color: var(--navy); }
+.detail .photos { display: flex; gap: 12px; flex-wrap: wrap; margin: 18px 0; }
+.detail .photos img { width: 220px; height: 220px; object-fit: cover; border-radius: 12px; }
+.detail p.description { font-size: 16px; line-height: 1.6; }
+.private-box { background: #fff7e0; border: 1px solid var(--gold); border-radius: 12px; padding: 14px 16px; margin-top: 18px; }
+.private-box strong { color: #5a4300; }
+
+.back { display: inline-block; margin-bottom: 14px; }
+
+@media (max-width: 600px) {
+  .card-form, .detail { padding: 20px; }
+  .detail .photos img { width: 100%; height: auto; }
+}
+
+/* Claims: form on the item page and the My Claims page */
+.claim-box { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line); }
+.claim-box h2 { text-align: left; font-size: 20px; color: var(--navy); margin: 0 0 6px; }
+.claim-box textarea {
+  width: 100%; min-height: 90px; padding: 12px; border: 1px solid var(--line); border-radius: 10px;
+  font-size: 15px; box-sizing: border-box; resize: vertical; margin: 8px 0 12px;
+}
+.claim-box button.primary { width: auto; padding: 12px 24px; }
+
+.claims-section { margin-bottom: 32px; }
+.claims-section h2 { text-align: left; color: var(--navy); font-size: 20px; margin: 0 0 12px; }
+.claim-card { background: #fff; border-radius: 16px; padding: 18px 20px; margin-bottom: 14px; box-shadow: 0 6px 18px rgba(10, 42, 107, 0.08); }
+.claim-card header { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.claim-message { background: #f5f8ff; border-radius: 10px; padding: 10px 12px; margin: 10px 0; white-space: pre-wrap; }
+.claim-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+.claim-actions button { width: auto; margin: 0; padding: 10px 20px; }
+.contact-line { font-weight: 600; margin: 8px 0 0; }
+.returned-note { color: #14532d; font-weight: 700; margin: 8px 0 0; }
+.empty-note { color: var(--muted); }
+.status-pill { padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+.status-pill.pending { background: #fff3cd; color: #7a5b00; }
+.status-pill.approved { background: #dcfce7; color: #14532d; }
+.status-pill.declined, .status-pill.withdrawn { background: #eceff5; color: #4b5563; }
+
+/* My Posts */
+.post-card { display: flex; gap: 16px; align-items: flex-start; }
+.post-thumb {
+  width: 92px; height: 92px; border-radius: 12px; flex: none; overflow: hidden;
+  background: #dfe6f3; color: var(--muted); font-size: 13px; font-weight: 700;
+  display: grid; place-items: center;
+}
+.post-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.post-body { flex: 1; min-width: 0; }
+.post-body header { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.link-button {
+  display: inline-block; padding: 10px 20px; border-radius: 10px; font-weight: 700; font-size: 14px;
+  border: 2px solid var(--line); color: var(--navy); text-decoration: none;
+}
+.link-button.highlight { border-color: var(--gold); background: #fff7e0; }
+.status-pill.open { background: #e0ecff; color: #1d4ed8; }
+.status-pill.claim_pending, .status-pill.returned { background: #dcfce7; color: #14532d; }
+.status-pill.closed, .status-pill.expired { background: #eceff5; color: #4b5563; }
+@media (max-width: 600px) { .post-card { flex-direction: column; } }

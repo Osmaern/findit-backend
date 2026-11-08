@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Posts | FindIt</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body class="app">
+  <header class="topbar">
+    <a class="brand-link" href="dashboard.html">Find<span>It</span></a>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="browse.html">Browse</a>
+      <a href="report.html">Report an item</a>
+      <a href="claims.html">My Claims</a>
+      <a href="profile.html">Profile</a>
+      <a id="nav-logout" href="#" hidden>Logout</a>
+    </nav>
+  </header>
+  <main class="container">
+    <h1 class="page-title">My Posts</h1>
+    <p class="page-sub">Everything you have reported. Close a report when you no longer need it.</p>
+    <div id="message" class="notice error" role="alert" hidden></div>
+    <div id="posts"></div>
+  </main>
+  <script src="js/common.js"></script>
+  <script src="js/myposts.js"></script>
+</body>
+</html>

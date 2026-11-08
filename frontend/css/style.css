@@ -1,3 +1,6 @@
+/* The hidden attribute must always win over the display rules below */
+[hidden] { display: none !important; }
+
 :root {
   --navy: #0a2a6b;
   --blue: #1d4ed8;
@@ -113,7 +116,8 @@ input:focus { outline: 3px solid rgba(29, 78, 216, 0.22); border-color: var(--bl
 
 .row { display: flex; justify-content: space-between; align-items: center; font-size: 14px; margin: 4px 0 20px; }
 .row label { margin: 0; font-weight: 500; display: flex; gap: 6px; align-items: center; }
-.muted-link { color: #5a4300; cursor: not-allowed; text-decoration: none; }
+.muted-link { color: #5a4300; font-weight: 600; text-decoration: none; }
+.muted-link:hover { text-decoration: underline; }
 
 button.primary {
   width: 100%;

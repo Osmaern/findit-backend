@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reset your password | FindIt</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="shell">
+    <section class="hero" aria-hidden="true">
+      <div>
+        <div class="brand">Find<span class="it">It</span></div>
+        <div class="tagline">Lost. Found. Reunited.</div>
+      </div>
+      <div>
+        <h1>Forgot your password?</h1>
+        <p>It happens. We will text you a code so you can choose a new one.</p>
+      </div>
+      <div class="badge"><strong>USTED</strong><span>Together for a Connected Campus</span></div>
+    </section>
+
+    <section class="panel">
+      <h2>Reset Your Password</h2>
+      <p id="subtitle" class="subtitle">Enter the phone number you registered with and we will send you a 6-digit code.</p>
+
+      <div id="message" class="notice error" role="alert" hidden></div>
+
+      <form id="phone-form" novalidate>
+        <div class="field">
+          <label for="phone">Phone number</label>
+          <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="0244123456" required>
+        </div>
+        <button class="primary" type="submit">Send reset code</button>
+      </form>
+
+      <form id="reset-form" novalidate hidden>
+        <div class="field">
+          <label for="code">Code from the SMS</label>
+          <input id="code" name="code" inputmode="numeric" autocomplete="one-time-code" pattern="\d{6}" maxlength="6" required>
+        </div>
+        <div class="field">
+          <label for="new-password">New password</label>
+          <div class="input-wrap">
+            <input id="new-password" name="new-password" type="password" autocomplete="new-password" minlength="8" maxlength="128" required>
+            <button type="button" class="toggle" data-toggle="new-password">Show</button>
+          </div>
+        </div>
+        <div class="field">
+          <label for="confirm">Confirm new password</label>
+          <input id="confirm" name="confirm" type="password" autocomplete="new-password" required>
+        </div>
+        <button class="primary" type="submit">Change password</button>
+      </form>
+      <button id="resend" class="secondary" type="button" hidden>Send a new code</button>
+
+      <p class="footer-text"><a href="login.html">Back to login</a></p>
+    </section>
+  </main>
+  <script src="js/common.js"></script>
+  <script src="js/forgot.js"></script>
+</body>
+</html>

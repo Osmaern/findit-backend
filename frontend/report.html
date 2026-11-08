@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Report an item | FindIt</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body class="app">
+  <header class="topbar">
+    <a class="brand-link" href="browse.html">Find<span>It</span></a>
+    <nav>
+      <a href="browse.html">Browse</a>
+      <a href="report.html">Report an item</a>
+      <a href="myposts.html">My Posts</a>
+      <a href="claims.html">My Claims</a>
+      <a id="nav-login" href="login.html">Login</a>
+      <a href="profile.html">Profile</a>
+      <a id="nav-logout" href="#" hidden>Logout</a>
+    </nav>
+  </header>
+  <main class="container">
+    <div class="card-form">
+      <h1 class="page-title">Report an item</h1>
+      <p class="page-sub">Tell the campus what you lost or found.</p>
+
+      <div id="message" class="notice error" role="alert" hidden></div>
+
+      <form id="item-form" novalidate>
+        <div class="type-toggle">
+          <label><input type="radio" name="kind" value="lost" checked> I lost something</label>
+          <label><input type="radio" name="kind" value="found"> I found something</label>
+        </div>
+
+        <div class="field">
+          <label for="title">Item</label>
+          <input id="title" name="title" placeholder="e.g. Black backpack" required minlength="3" maxlength="120">
+        </div>
+        <div class="field">
+          <label for="category">Category</label>
+          <select id="category" name="category" required></select>
+        </div>
+        <div class="field">
+          <label for="location">Where</label>
+          <input id="location" name="location" list="locations" placeholder="e.g. Main Hall" required minlength="2" maxlength="120">
+          <datalist id="locations">
+            <option value="Main Hall"></option>
+            <option value="Library"></option>
+            <option value="Cafeteria"></option>
+            <option value="Lecture Hall"></option>
+            <option value="Hostel"></option>
+            <option value="Admin Block"></option>
+            <option value="Security Post"></option>
+          </datalist>
+        </div>
+        <div class="field">
+          <label for="event_date">When</label>
+          <input id="event_date" name="event_date" type="date" required>
+        </div>
+        <div class="field">
+          <label for="description">Description</label>
+          <textarea id="description" name="description" required minlength="10" maxlength="1000"
+            placeholder="Colour, brand, what is inside, where exactly..."></textarea>
+        </div>
+        <div class="field" id="private-field">
+          <label for="private_detail">Private detail <span id="private-required"></span></label>
+          <input id="private_detail" name="private_detail" maxlength="500">
+          <p class="help" id="private-help"></p>
+        </div>
+        <div class="field">
+          <label for="photos">Photos <span style="font-weight:400;color:var(--muted)">(up to 2, JPEG, PNG or WEBP, 3 MB each)</span></label>
+          <input id="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple>
+          <div id="previews" class="thumbs"></div>
+        </div>
+        <div class="field">
+          <label style="font-weight:500;display:flex;gap:8px;align-items:center">
+            <input id="allow_contact" type="checkbox" style="width:auto;margin:0"> Allow signed-in users to contact me
+          </label>
+          <p class="help">Your phone number is only shown to signed-in users, and only if you tick this.</p>
+        </div>
+
+        <button class="primary" type="submit">Submit report</button>
+      </form>
+    </div>
+  </main>
+  <script src="js/common.js"></script>
+  <script src="js/report.js"></script>
+</body>
+</html>

@@ -3,6 +3,12 @@ const message = document.getElementById("message");
 const phoneInput = document.getElementById("phone");
 const rememberBox = document.getElementById("remember");
 
+// Sent here by the forgot-password page after a successful reset
+if (sessionStorage.getItem("passwordReset")) {
+  sessionStorage.removeItem("passwordReset");
+  showNotice(message, "Your password was changed. Log in with your new password.", "success");
+}
+
 // "Remember me" keeps only the phone number on this device.
 // Keeping a login alive for weeks needs refresh tokens, which are not built yet.
 const remembered = localStorage.getItem("rememberedPhone");
@@ -24,8 +30,7 @@ form.addEventListener("submit", async (event) => {
   if (result.ok) {
     if (rememberBox.checked) localStorage.setItem("rememberedPhone", phone);
     else localStorage.removeItem("rememberedPhone");
-    showNotice(message, "Logged in. The dashboard is the next step.", "success");
-    form.reset();
+    window.location.href = "dashboard.html";
   } else {
     showNotice(message, errorText(result.data), "error");
   }
