@@ -1,0 +1,29 @@
+/* Admin overview: totals and the people list */
+
+.section-title { color: var(--navy); font-size: 20px; margin: 28px 0 12px; text-align: left; }
+
+.stat-groups { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.stat-group { background: #fff; border-radius: 16px; padding: 16px 18px; box-shadow: 0 6px 18px rgba(10, 42, 107, 0.08); }
+.stat-group h2 { text-align: left; margin: 0 0 10px; font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.stat-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 6px 0; border-top: 1px solid var(--line); }
+.stat-row:first-of-type { border-top: 0; }
+.stat-row span { color: var(--navy); }
+.stat-row strong { font-size: 20px; color: var(--navy); }
+.stat-link { display: inline-block; margin-top: 8px; font-weight: 700; }
+
+.user-search { display: flex; flex-direction: row; align-items: stretch; gap: 8px; max-width: 520px; }
+.user-search input {
+  flex: 1; width: auto; min-width: 0; margin: 0; padding: 11px 12px; border: 1px solid var(--line); border-radius: 10px; font-size: 15px;
+}
+.user-search button { width: auto; margin: 0; padding: 0 20px; }
+.check-row { display: flex; align-items: center; gap: 8px; margin: 12px 0 16px; color: var(--navy); }
+.check-row input { width: auto; margin: 0; }
+
+.user-card header { align-items: flex-start; }
+.pill-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.role-pill { padding: 3px 10px; border-radius: 999px; background: #e6edff; color: #1e3a8a; font-size: 12px; font-weight: 700; text-transform: capitalize; }
+.suspended-pill { padding: 3px 10px; border-radius: 999px; background: #fde8e8; color: #9b1c1c; font-size: 12px; font-weight: 700; }
+.user-card .meta { word-break: break-word; }
+.danger { background: #dc2626; border: 0; border-radius: 10px; color: #fff; font-weight: 700; cursor: pointer; }
+.danger:disabled { opacity: 0.6; cursor: wait; }
+#more { width: auto; margin: 8px 0 0; padding: 10px 22px; }

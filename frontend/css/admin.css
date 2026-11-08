@@ -1,0 +1,23 @@
+/* Moderation: the admin page and the "Report this post" box on the item page */
+
+.tabs { display: flex; gap: 8px; margin-bottom: 18px; }
+.tab {
+  width: auto; margin: 0; padding: 9px 20px; border: 2px solid var(--line); border-radius: 999px;
+  background: #fff; color: var(--navy); font-weight: 700; cursor: pointer;
+}
+.tab.active { background: var(--navy); border-color: var(--navy); color: #fff; }
+
+.report-reason { margin: 8px 0; }
+.reason-pill { padding: 3px 10px; border-radius: 999px; background: #fde8e8; color: #9b1c1c; font-size: 12px; font-weight: 700; }
+
+.report-box { margin-top: 18px; }
+.link-like {
+  width: auto; margin: 0; padding: 0; border: 0; background: none;
+  color: var(--muted); font-size: 14px; text-decoration: underline; cursor: pointer;
+}
+.report-box form { margin-top: 10px; max-width: 420px; }
+.report-box select, .report-box textarea {
+  width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 10px;
+  font-size: 15px; box-sizing: border-box; margin-bottom: 10px;
+}
+.report-box .claim-actions button { width: auto; }

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Item | FindIt</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="app">
+  <header class="topbar">
+    <a class="brand-link" href="browse.html">Find<span>It</span></a>
+    <nav>
+      <a href="browse.html">Browse</a>
+      <a href="report.html">Report an item</a>
+      <a href="myposts.html">My Posts</a>
+      <a href="claims.html">My Claims</a>
+      <a id="nav-login" href="login.html">Login</a>
+      <a href="profile.html">Profile</a>
+      <a id="nav-logout" href="#" hidden>Logout</a>
+    </nav>
+  </header>
+  <main class="container">
+    <a class="back" href="browse.html">← Back to browse</a>
+    <div id="message" class="notice error" role="alert" hidden></div>
+    <article id="item" class="detail" hidden></article>
+  </main>
+  <script src="js/common.js"></script>
+  <script src="js/item.js"></script>
+</body>
+</html>

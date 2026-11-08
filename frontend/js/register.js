@@ -10,6 +10,11 @@ form.addEventListener("submit", async (event) => {
     return;
   }
 
+  if (!form.elements.accept_terms.checked) {
+    showNotice(message, "Please tick the box to accept the Terms and Privacy Policy.", "error");
+    return;
+  }
+
   const button = form.querySelector("button.primary");
   button.disabled = true;
   const result = await apiPost("/api/v1/auth/register", {
@@ -17,6 +22,7 @@ form.addEventListener("submit", async (event) => {
     email: values.email.trim(),
     phone: values.phone.trim(),
     password: values.password,
+    accept_terms: true,
   });
   button.disabled = false;
 

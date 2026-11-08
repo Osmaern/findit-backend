@@ -1,0 +1,11 @@
+/* Terms and Privacy page, and the accept box on the sign-up form */
+
+.terms { background: #fff; border-radius: 16px; padding: 22px 24px; box-shadow: 0 6px 18px rgba(10, 42, 107, 0.08); max-width: 760px; margin: 0 auto; line-height: 1.55; color: #1f2937; }
+.terms h2 { text-align: left; font-size: 18px; margin: 22px 0 6px; color: var(--navy); }
+.terms ul { padding-left: 20px; margin: 6px 0; }
+.terms li { margin: 5px 0; }
+.terms-back { margin-top: 24px; }
+
+.terms-check { display: flex; align-items: flex-start; gap: 10px; margin: 4px 0 16px; font-size: 14px; font-weight: 400; }
+.terms-check input { width: auto; margin: 3px 0 0; flex: none; }
+.terms-check a { font-weight: 700; }

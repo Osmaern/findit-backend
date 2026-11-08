@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard | FindIt</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="app dash-body">
+  <div class="dash">
+
+    <aside class="sidebar">
+      <div class="logo">
+        <svg class="logo-mark" viewBox="0 0 80 80" aria-hidden="true">
+          <circle cx="34" cy="34" r="25" fill="none" stroke="#fff" stroke-width="4"/>
+          <path d="M52 52l20 20" stroke="#f5b301" stroke-width="7" stroke-linecap="round"/>
+          <path d="M34 20l13 7v14l-13 7-13-7V27z" fill="#1d6fe0"/>
+          <path d="M21 27l13 7 13-7M34 34v14" fill="none" stroke="#fff" stroke-width="2"/>
+        </svg>
+        <div class="logo-name">Find<span>It</span></div>
+        <div class="logo-tag">Lost. Found. Reunited.</div>
+      </div>
+
+      <nav>
+        <a class="active" href="dashboard.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>Dashboard</a>
+        <a href="report.html?kind=lost"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M16 16l5 5"/><path d="M11 8v4l2 2"/></svg>Report Lost Item</a>
+        <a href="report.html?kind=found"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg>Report Found Item</a>
+        <a href="browse.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M16 16l4 4"/></svg>Browse Items</a>
+        <a href="myposts.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>My Posts</a>
+        <a href="claims.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v12H8l-4 4z"/><path d="M8 9h8"/></svg>My Claims</a>
+        <a href="profile.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>Profile</a>
+        <a id="nav-admin" href="admin.html" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg>Moderation</a>
+        <a id="nav-users" href="users.html" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2 20c.8-3.6 3.5-5.5 7-5.5s6.2 1.9 7 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.8c2 .6 3.4 2.3 4 5.2"/></svg>Admin overview</a>
+        <a id="nav-logout" href="#" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21H5V3h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>Logout</a>
+      </nav>
+
+      <div class="usted-block">
+        <svg class="campus-art" viewBox="0 0 240 120" aria-hidden="true">
+          <g fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10 110h220"/>
+            <path d="M30 110V50h60v60"/><path d="M90 110V30h60v80"/><path d="M150 110V50h60v60"/>
+            <path d="M85 30l5-14h40l5 14"/><path d="M100 14v-6"/><path d="M120 14v-6"/>
+            <path d="M45 65h8M45 78h8M62 65h8M62 78h8M105 45h8M105 58h8M122 45h8M122 58h8M105 72h8M122 72h8M165 65h8M165 78h8M182 65h8M182 78h8"/>
+          </g>
+        </svg>
+        <strong>USTED</strong>
+        <span>FindIt – Your Campus<br>Lost &amp; Found Companion</span>
+      </div>
+    </aside>
+
+    <div class="dash-main">
+      <header class="dash-top">
+        <form class="dash-search" action="browse.html" method="get">
+          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M16 16l4 4"/></svg>
+          <input name="q" type="search" placeholder="Search for items... (e.g. phone, bag, watch)">
+          <button type="submit">Search</button>
+        </form>
+        <div class="top-right">
+          <div class="who" id="who"></div>
+          <img class="avatar" src="img/student.jpg" alt="Your profile photo">
+        </div>
+      </header>
+
+      <section class="hero">
+        <div class="hero-content">
+          <h1><span class="it-blue">Find</span><span class="it-green">It</span></h1>
+          <h2>Lost something? Found something?</h2>
+          <p>Report it. Find it. Get it back!</p>
+          <div class="hero-actions">
+            <a class="btn-green" href="report.html?kind=lost">Report an item</a>
+            <a class="btn-outline" href="browse.html">Browse items</a>
+          </div>
+        </div>
+        <div class="hero-tag">Together for a<br>Connected Campus</div>
+      </section>
+
+      <div id="message" class="notice error" role="alert" hidden></div>
+
+      <div class="dash-cols">
+        <div class="col-main">
+          <section class="cards">
+            <a class="card-tile blue" href="report.html?kind=lost">
+              <span class="tile-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/></svg></span>
+              <span class="tile-body"><h3>Lost Items</h3><p>Report something you've lost</p></span>
+              <span class="tile-arrow">→</span>
+            </a>
+            <a class="card-tile green" href="report.html?kind=found">
+              <span class="tile-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M16 16l5 5"/></svg></span>
+              <span class="tile-body"><h3>Found Items</h3><p>Report an item you've found</p></span>
+              <span class="tile-arrow">→</span>
+            </a>
+            <a class="card-tile purple" href="claims.html">
+              <span class="tile-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg></span>
+              <span class="tile-body"><h3>Track Claims</h3><p>Check the status of your claims</p></span>
+              <span class="tile-arrow">→</span>
+            </a>
+          </section>
+
+          <section class="panel-box">
+            <div class="panel-head">
+              <h3><svg class="ico star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg>Featured items</h3>
+              <a href="browse.html">View All →</a>
+            </div>
+            <div id="featured" class="grid"></div>
+          </section>
+        </div>
+
+        <aside class="col-side">
+          <section class="panel-box">
+            <div class="panel-head">
+              <h3><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Recent activity</h3>
+            </div>
+            <ul id="activity" class="activity"></ul>
+          </section>
+
+          <section class="promo">
+            <span class="promo-check" aria-hidden="true">✓</span>
+            <div>
+              <strong>FindIt</strong>
+              <strong>Makes Campus Life Easier!</strong>
+              <p>A safer, more connected university community.</p>
+            </div>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </div>
+  <script src="js/common.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
