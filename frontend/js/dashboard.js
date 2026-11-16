@@ -51,6 +51,20 @@ async function init() {
     el("span", "role", role),
   );
 
+  // The totals are a nice extra: if they cannot load, the page simply leaves them out.
+  const stats = await apiGet("/api/v1/items/stats");
+  if (stats.ok) {
+    document.getElementById("impact-returned").textContent = stats.data.returned;
+    document.getElementById("impact-open").textContent = stats.data.open;
+    if (stats.data.returned === 1) {
+      document.getElementById("impact-returned-label").textContent = "item reunited with its owner";
+    }
+    if (stats.data.open === 1) {
+      document.getElementById("impact-open-label").textContent = "item still looking for an owner";
+    }
+    document.getElementById("impact").hidden = false;
+  }
+
   const list = await apiGet("/api/v1/items?limit=12");
   if (!list.ok) {
     showNotice(message, errorText(list.data), "error");

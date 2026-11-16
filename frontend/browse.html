@@ -6,6 +6,7 @@
   <title>Browse items | FindIt</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/app.css">
+  <script src="js/theme.js"></script>
 </head>
 <body class="app">
   <header class="topbar">
@@ -34,10 +35,23 @@
       <select id="category">
         <option value="">All categories</option>
       </select>
+      <input id="location" type="search" placeholder="Place (e.g. Library)" aria-label="Place">
+      <select id="days" aria-label="Posted">
+        <option value="">Any time</option>
+        <option value="1">Last 24 hours</option>
+        <option value="7">Last 7 days</option>
+        <option value="30">Last 30 days</option>
+      </select>
+    </div>
+
+    <div class="results-bar">
+      <span id="count" aria-live="polite"></span>
+      <button type="button" id="clear" class="secondary" hidden>Clear filters</button>
     </div>
 
     <div id="message" class="notice error" role="alert" hidden></div>
     <div id="results" class="grid"></div>
+    <div class="load-more-row"><button type="button" id="more" class="secondary" hidden>Load more</button></div>
   </main>
   <script src="js/common.js"></script>
   <script src="js/browse.js"></script>

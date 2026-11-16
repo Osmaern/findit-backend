@@ -14,7 +14,46 @@ async function loadItem() {
   }
   render(result.data);
   addClaimArea(result.data);
+  addMatches(result.data);
   addReportArea(result.data);
+}
+
+// Shows up to five open reports of the opposite kind that look like this one.
+// The section is only added when there is something to show, so a failed lookup leaves the page as it was.
+async function addMatches(item) {
+  if (item.status !== "open") return;
+  const result = await apiGet(`/api/v1/items/${item.id}/matches`);
+  if (!result.ok || result.data.length === 0) return;
+
+  const section = el("section", "matches");
+  section.append(
+    el("h2", null, item.kind === "lost" ? "Found items that might be yours" : "Lost reports that might match"),
+    el("p", "help", "These look similar. Open one to check the details."),
+  );
+  const list = el("div", "match-list");
+  for (const match of result.data) {
+    const link = el("a", "match-card");
+    link.href = `item.html?id=${match.id}`;
+    const thumb = el("div", "match-thumb");
+    if (match.photo_ids.length) {
+      const img = el("img");
+      img.src = `/api/v1/items/${match.id}/photos/${match.photo_ids[0]}`;
+      img.alt = match.title;
+      thumb.append(img);
+    } else {
+      thumb.textContent = "No photo";
+    }
+    const text = el("div", "match-text");
+    text.append(
+      el("span", `tag ${match.kind}`, match.kind === "lost" ? "Lost" : "Found"),
+      el("strong", null, match.title),
+      el("span", "meta", `${match.location} · ${formatDate(match.event_date)}`),
+    );
+    link.append(thumb, text);
+    list.append(link);
+  }
+  section.append(list);
+  container.append(section);
 }
 
 // Owners get a link to review claims; everyone else gets the claim form (or a login link).
