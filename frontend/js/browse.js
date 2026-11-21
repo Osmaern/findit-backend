@@ -3,6 +3,13 @@ const message = document.getElementById("message");
 const searchInput = document.getElementById("q");
 const kindSelect = document.getElementById("kind");
 const categorySelect = document.getElementById("category");
+const locationInput = document.getElementById("location");
+const daysSelect = document.getElementById("days");
+const countText = document.getElementById("count");
+const clearButton = document.getElementById("clear");
+const moreButton = document.getElementById("more");
+const PAGE_SIZE = 24;
+let shown = 0;
 
 for (const [value, label] of Object.entries(CATEGORY_LABELS)) {
   categorySelect.append(new Option(label, value));
@@ -33,33 +40,66 @@ function itemCard(item) {
   return link;
 }
 
-async function loadItems() {
-  const params = new URLSearchParams({ limit: "24" });
+function hasFilters() {
+  return Boolean(
+    searchInput.value.trim() || kindSelect.value || categorySelect.value || locationInput.value.trim() || daysSelect.value,
+  );
+}
+
+function queryFor(offset) {
+  const params = new URLSearchParams({ limit: String(PAGE_SIZE), offset: String(offset) });
   if (searchInput.value.trim()) params.set("q", searchInput.value.trim());
   if (kindSelect.value) params.set("kind", kindSelect.value);
   if (categorySelect.value) params.set("category", categorySelect.value);
+  if (locationInput.value.trim()) params.set("location", locationInput.value.trim());
+  if (daysSelect.value) params.set("days", daysSelect.value);
+  return params;
+}
 
-  const result = await apiGet(`/api/v1/items?${params}`);
-  results.innerHTML = "";
+// loadItems(true) starts a new search; loadItems(false) adds the next page below the current ones.
+async function loadItems(fresh = true) {
+  if (fresh) shown = 0;
+  const result = await apiGet(`/api/v1/items?${queryFor(shown)}`);
+  if (fresh) results.innerHTML = "";
+  clearButton.hidden = !hasFilters();
   if (!result.ok) {
+    moreButton.hidden = true;
     showNotice(message, errorText(result.data), "error");
     return;
   }
   message.hidden = true;
-  if (result.data.length === 0) {
-    results.append(el("p", "empty", "No open items match your search."));
-    return;
-  }
   for (const item of result.data) results.append(itemCard(item));
+  shown += result.data.length;
+
+  if (shown === 0) {
+    results.append(el("p", "empty", "No open items match your search."));
+    countText.textContent = "";
+  } else {
+    countText.textContent = shown === 1 ? "Showing 1 item" : `Showing ${shown} items`;
+  }
+  // A full page means there may be more; a short page means we reached the end.
+  moreButton.hidden = result.data.length < PAGE_SIZE;
 }
 
 let searchTimer;
-searchInput.addEventListener("input", () => {
+function searchSoon() {
   clearTimeout(searchTimer);
-  searchTimer = setTimeout(loadItems, 300);
+  searchTimer = setTimeout(() => loadItems(true), 300);
+}
+searchInput.addEventListener("input", searchSoon);
+locationInput.addEventListener("input", searchSoon);
+kindSelect.addEventListener("change", () => loadItems(true));
+categorySelect.addEventListener("change", () => loadItems(true));
+daysSelect.addEventListener("change", () => loadItems(true));
+moreButton.addEventListener("click", () => loadItems(false));
+clearButton.addEventListener("click", () => {
+  searchInput.value = "";
+  locationInput.value = "";
+  kindSelect.value = "";
+  categorySelect.value = "";
+  daysSelect.value = "";
+  loadItems(true);
 });
-kindSelect.addEventListener("change", loadItems);
-categorySelect.addEventListener("change", loadItems);
 
 searchInput.value = new URLSearchParams(window.location.search).get("q") || "";
-loadItems();
+loadItems(true);

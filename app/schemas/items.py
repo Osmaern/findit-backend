@@ -45,3 +45,10 @@ class MyItemOut(ItemOut):
     """An item as listed on its owner's My Posts page."""
 
     pending_claims: int = 0
+
+
+class PublicStats(BaseModel):
+    """Totals shown on the dashboard. Counts only: no names, phones or item details."""
+
+    returned: int
+    open: int

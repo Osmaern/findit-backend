@@ -3,12 +3,12 @@
 .tabs { display: flex; gap: 8px; margin-bottom: 18px; }
 .tab {
   width: auto; margin: 0; padding: 9px 20px; border: 2px solid var(--line); border-radius: 999px;
-  background: #fff; color: var(--navy); font-weight: 700; cursor: pointer;
+  background: var(--surface); color: var(--navy-text); font-weight: 700; cursor: pointer;
 }
-.tab.active { background: var(--navy); border-color: var(--navy); color: #fff; }
+.tab.active { background: var(--navy); border-color: var(--navy-text); color: #fff; }
 
 .report-reason { margin: 8px 0; }
-.reason-pill { padding: 3px 10px; border-radius: 999px; background: #fde8e8; color: #9b1c1c; font-size: 12px; font-weight: 700; }
+.reason-pill { padding: 3px 10px; border-radius: 999px; background: var(--tint-red); color: var(--on-tint-red); font-size: 12px; font-weight: 700; }
 
 .report-box { margin-top: 18px; }
 .link-like {

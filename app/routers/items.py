@@ -1,4 +1,5 @@
 import secrets
+from datetime import timedelta
 from pathlib import Path
 from typing import Literal
 
@@ -15,8 +16,9 @@ from app.core.security import utc_now
 from app.models.claim import Claim
 from app.models.item import Item, ItemPhoto, ItemPrivate
 from app.models.user import User
-from app.schemas.items import ItemIn, ItemOut, MyItemOut
+from app.schemas.items import ItemIn, ItemOut, MyItemOut, PublicStats
 from app.services.images import InvalidImage, clean_image
+from app.services.matching import MAX_CANDIDATES, best_matches
 from app.services.notify import notify, short_title
 
 router = APIRouter(prefix="/api/v1/items", tags=["items"])
@@ -89,6 +91,7 @@ def list_items(
     category: str | None = Query(default=None, max_length=40),
     location: str | None = Query(default=None, max_length=120),
     q: str | None = Query(default=None, max_length=80),
+    days: int | None = Query(default=None, ge=1, le=365),
     limit: int = Query(default=20, ge=1, le=MAX_PAGE_SIZE),
     offset: int = Query(default=0, ge=0),
     db: Session = Depends(get_db),
@@ -99,10 +102,14 @@ def list_items(
     if category:
         stmt = stmt.where(Item.category == category)
     if location:
-        stmt = stmt.where(Item.location == location)
+        # Part of a place name is enough ("lib" finds "Library"). autoescape makes % and _ ordinary characters.
+        stmt = stmt.where(Item.location.icontains(location, autoescape=True))
+    if days:
+        stmt = stmt.where(Item.created_at >= utc_now() - timedelta(days=days))
     if q:
-        pattern = f"%{q}%"
-        stmt = stmt.where(Item.title.ilike(pattern) | Item.description.ilike(pattern))
+        stmt = stmt.where(
+            Item.title.icontains(q, autoescape=True) | Item.description.icontains(q, autoescape=True)
+        )
     stmt = (
         stmt.order_by(Item.created_at.desc())
         .offset(offset)
@@ -110,6 +117,18 @@ def list_items(
         .options(selectinload(Item.photos))
     )
     return [_to_out(item, None) for item in db.scalars(stmt)]
+
+
+@router.get("/stats", response_model=PublicStats)
+def public_stats(db: Session = Depends(get_db)):
+    """How many items were reunited with their owners, and how many are still looking.
+
+    Public on purpose: it holds only two totals. Must stay above /{item_id}."""
+    returned = db.scalar(select(func.count(Item.id)).where(Item.status == "returned")) or 0
+    open_items = (
+        db.scalar(select(func.count(Item.id)).where(Item.status == "open", Item.expires_at > utc_now())) or 0
+    )
+    return PublicStats(returned=returned, open=open_items)
 
 
 @router.get("/mine", response_model=list[MyItemOut])
@@ -146,6 +165,31 @@ def get_item(item_id: int, db: Session = Depends(get_db), viewer: User | None = 
     if item is None or not _is_visible(item, viewer):
         raise HTTPException(status_code=404, detail="Item not found")
     return _to_out(item, viewer)
+
+
+@router.get("/{item_id}/matches", response_model=list[ItemOut])
+def possible_matches(
+    item_id: int, db: Session = Depends(get_db), viewer: User | None = Depends(get_optional_user)
+):
+    """Open reports of the opposite kind that look like this one. Public details only."""
+    item = db.get(Item, item_id)
+    if item is None or not _is_visible(item, viewer):
+        raise HTTPException(status_code=404, detail="Item not found")
+    if item.status != "open" or item.expires_at <= utc_now():
+        return []
+    candidates = db.scalars(
+        select(Item)
+        .where(
+            Item.kind != item.kind,
+            Item.status == "open",
+            Item.expires_at > utc_now(),
+            Item.user_id != item.user_id,  # your own reports are not "matches"
+        )
+        .order_by(Item.created_at.desc())
+        .limit(MAX_CANDIDATES)
+        .options(selectinload(Item.photos))
+    ).all()
+    return [_to_out(other, None) for other in best_matches(item, list(candidates))]
 
 
 @router.post("/{item_id}/photos", status_code=201, dependencies=[Depends(rate_limit("photo-upload", 60, 3600))])
